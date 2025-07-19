@@ -33,6 +33,10 @@
 
   <!-- References to RimWorld and Unity DLLs -->
   <ItemGroup>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,7 +47,6 @@
 
   <!-- NuGet package references -->
   <ItemGroup>
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4518" />
     <PackageReference Include="Lib.Harmony" Version="2.*">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
