@@ -1,10 +1,13 @@
 name: Build and Deploy to Steam Workshop
 
+env:
+  workshopId: '3526439840'
+
 on:
   push:
     branches:
       - master
-
+      
 jobs:
   build:
     name: Build
@@ -60,8 +63,26 @@ jobs:
         continue-on-error: true
         with: 
           appId: 294100 # Game's Steam App ID
-          publishedFileId: 3526439840 # Your mod's Steam Workshop ID
+          publishedFileId: ${{ env.workshopId }} # Your mod's Steam Workshop ID
           path: 'mod' # Path to your mod's folder from repository root
           username: ${{ secrets.STEAM_USERNAME }}
           configVdf:  ${{ secrets.STEAM_CONFIG_VDF }}
           changeNote: ${{ github.event.head_commit.message }}
+      
+      - name: Verify Upload
+        run: |
+          if [ "${{ env.workshopId }}" = "3526439840" ]; then
+            echo "Deployed to staging, skipping verification of hidden workshop item."
+            exit 0
+          fi
+
+          time = $(curl -X POST "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/"   -H "Content-Type: application/x-www-form-urlencoded"   -d "itemcount=1"   -d "publishedfileids[0]=${{ env.workshopId }}" | jq -r '.response.publishedfiledetails[].time_updated')
+          now=$(date +%s)
+          if [ $time -lt $now - 300 ]; then
+            echo "Upload verified successfully."
+          else
+            echo "Upload verification failed."
+            exit 1
+          fi
+
+      
