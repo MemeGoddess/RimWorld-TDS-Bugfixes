@@ -16,6 +16,18 @@ jobs:
         with:
             path: 'mod'
 
+      - name: Check required secrets
+        run: |
+          if [ -z "${{ secrets.STEAM_USERNAME }}" ]; then
+            echo "Error: STEAM_USERNAME secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.STEAM_CONFIG_VDF }}" ]; then
+            echo "Error: STEAM_CONFIG_VDF secret is not set"
+            exit 1
+          fi
+          echo "All required secrets are present"
+
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v4
         with:
