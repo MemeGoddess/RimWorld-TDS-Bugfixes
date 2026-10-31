@@ -20,7 +20,7 @@ namespace TDS_Bug_Fixes
 #endif
 
 			Harmony harmony = new Harmony("Uuugggg.rimworld.TDS_Bug_Fixes.main");	
-			harmony.PatchAll();
+			harmony.PatchAll(Assembly.GetExecutingAssembly());
 		}
 
 		public override void DoSettingsWindowContents(Rect inRect)
